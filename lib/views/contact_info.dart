@@ -11,7 +11,7 @@ class ContactInfo extends StatefulWidget {
 
 class _ContactInfoState extends State<ContactInfo> {
   bool isFirst = true;
-  TextEditingController nameController = TextEditingController();
+  TextEditingController nameController = TextEditingController(text: "Hello");
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController addressController = TextEditingController();
@@ -20,6 +20,18 @@ class _ContactInfoState extends State<ContactInfo> {
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   String name = "";
+
+  @override
+  void initState() {
+    // nameController.text="Ravi";
+    // emailController.text="ravi007@gmail.com";
+    // phoneController.text="9898989898";
+    // addressController.text="150 ring";
+    // address1Controller.text="raj";
+    // address2Controller.text="ind";
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -127,11 +139,19 @@ class _ContactInfoState extends State<ContactInfo> {
                             ),
                             Expanded(
                               child: TextFormField(
-                                controller: nameController,
+                                initialValue: "",
+                                onFieldSubmitted: (value) {
+                                  print("onFieldSubmitted $value");
+                                },
+                                // controller: nameController,
                                 // onChanged: (value) {
                                 //   name = value;
                                 //   print(value);
                                 // },
+                                onSaved: (newValue) {
+                                  print("On Save $newValue");
+                                  name = newValue ?? "";
+                                },
                                 validator: (value) {
                                   if (value?.isEmpty ?? false) {
                                     return "Enter Your Name";
@@ -180,6 +200,7 @@ class _ContactInfoState extends State<ContactInfo> {
                               child: TextFormField(
                                 controller: phoneController,
                                 keyboardType: TextInputType.phone,
+                                onSaved: (newValue) {},
                                 validator: (value) {
                                   if (value?.isEmpty ?? false) {
                                     return "Enter Phone Number";
@@ -258,6 +279,17 @@ class _ContactInfoState extends State<ContactInfo> {
                             ElevatedButton(
                                 onPressed: () {
                                   if (formKey.currentState?.validate() ?? false) {
+                                    FocusScope.of(context).unfocus(); // For keyboard Close
+                                    formKey.currentState?.save();
+                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                      content: Text("Save Successfully"),
+                                      duration: Duration(seconds: 3),
+                                      backgroundColor: Colors.red,
+                                      action: SnackBarAction(label: "Send",onPressed: () {
+
+                                      },),
+                                    ));
+
                                     print("Save $name");
                                   } else {
                                     print("Invalid");
@@ -269,13 +301,16 @@ class _ContactInfoState extends State<ContactInfo> {
                             ),
                             ElevatedButton(
                                 onPressed: () {
-                                  print("Save");
-                                  nameController.clear();
-                                  emailController.clear();
-                                  phoneController.text = "";
-                                  addressController.text = "";
-                                  address1Controller.text = "";
-                                  address2Controller.text = "";
+                                  print("Reset");
+                                  // nameController.clear();
+                                  // emailController.clear();
+                                  // phoneController.text = "";
+                                  // addressController.text = "";
+                                  // address1Controller.text = "";
+                                  // address2Controller.text = "";
+
+                                  formKey.currentState?.reset();
+                                  FocusScope.of(context).unfocus(); // For keyboard Close
                                 },
                                 child: Text("Reset")),
                           ],
