@@ -1,6 +1,9 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ContactInfo extends StatefulWidget {
   const ContactInfo({Key? key}) : super(key: key);
@@ -20,6 +23,9 @@ class _ContactInfoState extends State<ContactInfo> {
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   String name = "";
+
+  final ImagePicker picker = ImagePicker();
+  String? filePath;
 
   @override
   void initState() {
@@ -285,9 +291,10 @@ class _ContactInfoState extends State<ContactInfo> {
                                       content: Text("Save Successfully"),
                                       duration: Duration(seconds: 3),
                                       backgroundColor: Colors.red,
-                                      action: SnackBarAction(label: "Send",onPressed: () {
-
-                                      },),
+                                      action: SnackBarAction(
+                                        label: "Send",
+                                        onPressed: () {},
+                                      ),
                                     ));
 
                                     print("Save $name");
@@ -333,13 +340,38 @@ class _ContactInfoState extends State<ContactInfo> {
                       radius: 55,
                       backgroundColor: Colors.grey,
                       foregroundColor: Colors.black,
+                      backgroundImage: filePath != null
+                          ? FileImage(
+                              File(filePath ?? ""),
+                            )
+                          : null,
                       child: Text("Add"),
                     ),
                     Positioned(
                       bottom: 0,
                       right: 0,
                       left: 80,
-                      child: Icon(Icons.add_circle_rounded),
+                      child: IconButton(
+                          onPressed: () async {
+                            // XFile? file = await picker.pickImage(source: ImageSource.gallery);
+                            XFile? file = await picker.pickImage(source: ImageSource.camera);
+                            filePath = file?.path;
+                            setState(() {});
+                            print(file?.path);
+                          },
+                          icon: Icon(Icons.camera_alt_rounded)),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      left: 120,
+                      child: IconButton(
+                          onPressed: () async {
+                            XFile? file = await picker.pickImage(source: ImageSource.gallery);
+                            filePath = file?.path;
+                            setState(() {});
+                            print(file?.path);
+                          },
+                          icon: Icon(Icons.photo)),
                     )
                   ],
                 ),
