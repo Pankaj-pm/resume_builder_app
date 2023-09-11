@@ -25,7 +25,9 @@ class _ContactInfoState extends State<ContactInfo> {
   String name = "";
 
   final ImagePicker picker = ImagePicker();
-  String? filePath;
+
+  // String? filePath;
+  XFile? xFile;
 
   @override
   void initState() {
@@ -340,9 +342,9 @@ class _ContactInfoState extends State<ContactInfo> {
                       radius: 55,
                       backgroundColor: Colors.grey,
                       foregroundColor: Colors.black,
-                      backgroundImage: filePath != null
+                      backgroundImage: xFile != null
                           ? FileImage(
-                              File(filePath ?? ""),
+                              File(xFile?.path ?? ""),
                             )
                           : null,
                       child: Text("Add"),
@@ -354,10 +356,9 @@ class _ContactInfoState extends State<ContactInfo> {
                       child: IconButton(
                           onPressed: () async {
                             // XFile? file = await picker.pickImage(source: ImageSource.gallery);
-                            XFile? file = await picker.pickImage(source: ImageSource.camera);
-                            filePath = file?.path;
+                            xFile = await picker.pickImage(source: ImageSource.camera);
+
                             setState(() {});
-                            print(file?.path);
                           },
                           icon: Icon(Icons.camera_alt_rounded)),
                     ),
@@ -365,11 +366,11 @@ class _ContactInfoState extends State<ContactInfo> {
                       bottom: 0,
                       left: 120,
                       child: IconButton(
-                          onPressed: () async {
-                            XFile? file = await picker.pickImage(source: ImageSource.gallery);
-                            filePath = file?.path;
-                            setState(() {});
-                            print(file?.path);
+                          onPressed: () {
+                            picker.pickImage(source: ImageSource.gallery).then((value) {
+                              xFile = value;
+                              setState(() {});
+                            });
                           },
                           icon: Icon(Icons.photo)),
                     )

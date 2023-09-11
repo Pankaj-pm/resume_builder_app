@@ -5,7 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:resume_builder_app/buid_option.dart';
 import 'package:resume_builder_app/constant.dart';
 import 'package:resume_builder_app/views/contact_info.dart';
+import 'package:resume_builder_app/views/personal_detail.dart';
 import 'package:resume_builder_app/views/splash_screen.dart';
+import 'package:resume_builder_app/views/technical_skills.dart';
 
 void main() {
   runApp(const MyApp());
@@ -41,7 +43,9 @@ class MyApp extends StatelessWidget {
         "/": (context) => SplashScreen(),
         homePage: (context) => MyHomePage(title: 'Resume Builder'),
         buildOption: (context) => BuildOption(title: 'Resume Builder'),
-        contactInfo: (context) => ContactInfo()
+        contactInfo: (context) => ContactInfo(),
+        personalDetailRoute: (context) => PersonalDetail(),
+        technicalSkillsRoute: (context) => TechnicalSkills()
       },
     );
   }
