@@ -4,6 +4,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:resume_builder_app/constant.dart';
+import 'package:resume_builder_app/util.dart';
 
 class ContactInfo extends StatefulWidget {
   const ContactInfo({Key? key}) : super(key: key);
@@ -14,7 +16,7 @@ class ContactInfo extends StatefulWidget {
 
 class _ContactInfoState extends State<ContactInfo> {
   bool isFirst = true;
-  TextEditingController nameController = TextEditingController(text: "Hello");
+  TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController addressController = TextEditingController();
@@ -147,7 +149,8 @@ class _ContactInfoState extends State<ContactInfo> {
                             ),
                             Expanded(
                               child: TextFormField(
-                                initialValue: "",
+                                // initialValue: "",
+                                controller: nameController,
                                 onFieldSubmitted: (value) {
                                   print("onFieldSubmitted $value");
                                 },
@@ -298,6 +301,15 @@ class _ContactInfoState extends State<ContactInfo> {
                                         onPressed: () {},
                                       ),
                                     ));
+                                    resume.name=nameController.text;
+                                    resume.email=emailController.text;
+                                    resume.phone=phoneController.text;
+                                    resume.address1=addressController.text;
+                                    resume.address2=address1Controller.text;
+                                    resume.address3=address2Controller.text;
+
+
+                                    Navigator.pushNamed(context, pdfScreenRoute,arguments: resume);
 
                                     print("Save $name");
                                   } else {
